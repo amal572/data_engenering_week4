@@ -1,0 +1,14 @@
+pg-dbt-workshop:
+  outputs:
+    dev:
+      type: postgres
+      host: pgdatabase
+      port: 5432
+      user: root
+      pass: root
+      dbname: ny_taxi
+      schema: public
+  target: dev
+
+
+

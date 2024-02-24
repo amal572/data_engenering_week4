@@ -1,0 +1,9 @@
+version: '3'
+services:
+  dbt:
+    build:
+      context: .
+      target: dbt-all
+    volumes:
+      - .:/usr/app/dbt
+
