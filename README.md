@@ -723,7 +723,7 @@ from {{ ref('taxi_zone_lookup') }}
 
 #### Ref
 
-> 06:40/44:38 (4.3.1) The FROM clause: ref macro
+The FROM clause: ref macro
 
 The most important function in dbt is `ref()`; it’s impossible to build even moderately complex models without it.
 `ref()` is how you reference one model within another. This is a very common behavior, as typically models are built to
@@ -759,7 +759,7 @@ with green_data as (
 
 ### Create our first dbt model
 
-> 08:38/44:38 (4.3.1) Define a source and develop the first model (stg_green_tripdata)
+Define a source and develop the first model (stg_green_tripdata)
 
 Create these folders and files under the dbt project `taxi_rides_ny` :
 
@@ -793,9 +793,7 @@ select * from {{ source('staging', 'green_tripdata') }}
 limit 100
 ```
 
-![w4s13](dtc/w4s13.png)
-
-Now, we can run this model with one of these following commands:
+Now, we can run this model with one of the following commands:
 
 ``` bash
 dbt run  # Builds models in your target database.
@@ -806,10 +804,6 @@ dbt run --select +stg_green_tripdata+  # Builds a specific model and its childre
 ```
 
 This is what appears in dbt Cloud after running the command `dbt run`.
-
-![w4s18](dtc/w4s18.png)
-
-> 16:06/44:38 (4.3.1)
 
 Then we modify the query `models/staging/stg_green_tripdata.sql` by indicating the columns.
 
@@ -859,11 +853,9 @@ dbt run --select stg_green_tripdata
 
 Then we go to BigQuery and we see that the view `stg_green_tripdata` is created.
 
-![w4s19](dtc/w4s19.png)
-
 ### Macros
 
-> 17:24/44:38 (4.3.1) Definition and usage of macros
+Definition and usage of macros
 
 [Macros](https://docs.getdbt.com/docs/build/jinja-macros#macros) in Jinja are pieces of code that can be reused multiple
 times – they are analogous to "functions" in other programming languages, and are extremely useful if you find yourself
@@ -1008,8 +1000,6 @@ limit 100;
 You can also see the compiled code under **target \> compiled \> taxi_rides_ny \> models \> staging \>
 stg_green_tripdata.sql**.
 
-![w4s20](dtc/w4s20.png)
-
 ### Packages
 
 > 24:10/44:38 (4.3.1) Importing and using dbt packages
@@ -1040,14 +1030,6 @@ dbt deps
 ```
 
 We should see this logs and a lot of folders and files created under `dbt_packages/dbt_utils`.
-
-<table>
-<tr><td>
-<img src="dtc/w4s21.png">
-</td><td>
-<img src="dtc/w4s22.png">
-</td></tr>
-</table>
 
 Let’s go back to the model.
 
@@ -1091,7 +1073,7 @@ select
 
 ### Variables
 
-> 29:18/44:38 (4.3.1) Definition of variables and setting a variable from the cli
+Definition of variables and setting a variable from the cli
 
 dbt provides a mechanism, [variables](https://docs.getdbt.com/reference/dbt-jinja-functions/var), to provide data to
 models for compilation. Variables can be used to [configure
@@ -1135,7 +1117,7 @@ Then, we can run the model.
 dbt build --m stg_green_tripdata --var 'is_test_run: false'
 ```
 
-> 33:33/44:38 (4.3.1) Add second model (stg_yellow_tripdata)
+Add second model (stg_yellow_tripdata)
 
 We make the same changes for `models/staging/stg_yellow_tripdata.sql`.
 
@@ -1195,15 +1177,7 @@ dbt run --var 'is_test_run: false'
 
 We should see this log and `stg_yellow_tripdata` created in BigQuery (we need to refresh the page).
 
-<table>
-<tr><td>
-<img src="dtc/w4s23.png">
-</td><td>
-<img src="dtc/w4s24.png">
-</td></tr>
-</table>
-
-> 35:16/44:38 (4.3.1) Creating and using dbt seed (taxi_zones_lookup and dim_zone)
+Creating and using dbt seed (taxi_zones_lookup and dim_zone)
 
 The dbt [seed](https://docs.getdbt.com/reference/commands/seed) command will load `csv` files located in the seed-paths
 directory of your dbt project into your data warehouse.
@@ -1235,8 +1209,6 @@ dbt seed --full-refresh
 
 We can see the change in the BigQuery table `taxi_zone_loopup`.
 
-![w4s25](dtc/w4s25.png)
-
 Then, create the file `models/core/dim_zones.sql`.
 
 **File `models/core/dim_zones.sql`**
@@ -1255,9 +1227,7 @@ from {{ ref('taxi_zone_lookup') }}
 
 Ideally, we want everything in the directory to be tables to have efficient queries.
 
-![w4s26](dtc/w4s26.png)
-
-> 41:20/44:38 (4.3.1) Unioning our models in fact_trips and understanding dependencies
+Unioning our models in fact_trips and understanding dependencies
 
 Now, create the model `models/core/fact_trips.sql`.
 
@@ -1325,18 +1295,8 @@ on trips_unioned.dropoff_locationid = dropoff_zone.locationid
 
 We have this.
 
-![w4s09](dtc/w4s09.png)
-
 The `dbt run` command will create everything, except the seeds. I we also want to run the seeds, we will use `dbt build`
 command.
-
-<table>
-<tr><td>
-<img src="dtc/w4s27a.png">
-</td><td>
-<img src="dtc/w4s27b.png">
-</td></tr>
-</table>
 
 The command `dbt build --select fast_trips` will only run the model `fact_trips`.
 
@@ -1405,11 +1365,7 @@ columns:
 
 **Warnings in the CLI from running `dbt test`.**
 
-![w4s28](dtc/w4s28.png)
-
 ### Documentation
-
-> 3:17/13:51 (4.3.2) Documentation
 
 - dbt provides a way to generate documentation for your dbt project and render it as a website.
 - The documentation for your project includes:
@@ -1457,8 +1413,6 @@ models:
 ```
 
 ## Deploying a dbt project
-
-> 4:28/13:51 (4.3.2) Deployment
 
 We define a model in this file `models/core/dm_monthly_zone_revenue.sql`.
 
@@ -1609,8 +1563,6 @@ vars:
   payment_type_values: [1, 2, 3, 4, 5, 6]
 ```
 
-> 9:04/13:51 (4.3.2) Run dbt test
-
 Then, run `dbt test` or one of the following commands:
 
 ``` bash
@@ -1620,8 +1572,6 @@ dbt test --select stg_green_tripdata+  # Run tests on data in specified model an
 dbt test --select +stg_green_tripdata  # Run tests on data in specified model and its ancestors.
 dbt build  # Run the seeds, run the tests and run the models.
 ```
-
-![w4s29](dtc/w4s29.png)
 
 We see that the key `tripid` of the `stg_green_tripdata` table is not unique contrary to what we thought.
 
@@ -1667,14 +1617,6 @@ where rn = 1
 
 Run `dbt build` command and everything should be green.
 
-<table>
-<tr><td>
-<img src="dtc/w4s31.png">
-</td><td>
-<img src="dtc/w4s30.png">
-</td></tr>
-</table>
-
 Finally, create `models/core/schema.yml` to comple the project.
 
 **File `models/core/schema.yml`**
@@ -1708,8 +1650,6 @@ models:
 
 ### What is deployment?
 
-> 0:00/13:56 (4.4.1) Theory
-
 Running dbt in production means setting up a system to run a *dbt job on a schedule*, rather than running dbt commands
 manually from the command line.
 
@@ -1731,8 +1671,6 @@ In addition to setting up a schedule, there are other considerations when settin
 See [About deployments](https://docs.getdbt.com/docs/deploy/deployments) for more.
 
 ### Running a dbt project in production
-
-> 1:47/13:56 (4.4.1) Running a dbt project in production
 
 - dbt cloud includes a scheduler where to create jobs to run in production
 - A single job can run multiple commands
@@ -1762,7 +1700,6 @@ See [About deployments](https://docs.getdbt.com/docs/deploy/deployments) for mor
 In dbt cloud, commit **my-new-branch** and pull request. Next, in my GitHub repository
 [taxi_rides_ny](https://github.com/boisalai/taxi_rides_ny), I merge this pull request to my **main branch**.
 
-> 6:02/13:56 (4.4.1) Environments
 
 Now go to **Environments** (**Deploy \> Environments**) and click on **Create Environment** button.
 
@@ -1771,18 +1708,6 @@ Create the new environment with this information:
 - **Name**: Production
 - **dbt Version**: 1.4 (latest)
 - **Dataset**: production
-
-Click on **Save** button.
-
-<table>
-<tr><td>
-<img src="dtc/w4s32.png">
-</td><td>
-<img src="dtc/w4s33.png">
-</td></tr>
-</table>
-
-> 7:05/13:56 (4.4.1) Jobs
 
 Now go to **Jobs** (**Deploy \> Jobs**) and click on **Create New Job** button.
 
@@ -1813,8 +1738,6 @@ Click on **Save** button.
 Let’s run this by clicking on **Run now** button.
 
 **Run Overview**
-
-![w4s34](dtc/w4s34.png)
 
 We should see :
 
@@ -1891,14 +1814,6 @@ Under **Run Timing** tab, below the log for `dbt test --var 'is_test_run: false'
 15:59:54  Done. PASS=11 WARN=0 ERROR=0 SKIP=0 TOTAL=11
 ```
 
-<table>
-<tr><td>
-<img src="dtc/w4s35.png">
-</td><td>
-<img src="dtc/w4s36.png">
-</td></tr>
-</table>
-
 Documentation
 
 > 12:23/13:56 (4.4.1) Account Settings
@@ -1954,8 +1869,6 @@ We create 5 charts:
 - Between 13:04 and 18:06, we create a stacked column bar for **Trips per month and year**.
 
 We should some thing like this.
-
-![w4s41](dtc/w4s41.png)
 
 In BigQuery, I run this.
 
